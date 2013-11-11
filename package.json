@@ -1,13 +1,16 @@
 {
-  "name": "EarthBag Admin",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "start": "node app.js"
-  },
-  "dependencies": {
-    "express": "3.4.4",
-    "ejs": "*",
-    "less-middleware": "*"
-  }
+    "name": "EarthBagAdmin",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "start": "node app.js"
+    },
+    "dependencies": {
+        "express": "3.4.4",
+        "ejs": "*",
+        "less-middleware": "*",
+        "mongodb": "*",
+        "q": "*",
+        "lodash": "*"
+    }
 }

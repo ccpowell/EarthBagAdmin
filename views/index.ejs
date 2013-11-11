@@ -1,11 +1,31 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/cupertino/jquery-ui.css"
+          type="text/css" media="all"/>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+    <script src="/javascripts/bower_components/requirejs/require.js" data-main="/javascripts/main.js"></script>
+</head>
+<body>
+<h1><%= title %></h1>
+
+<div id="regionsPage">
+    <table id="regionsTable">
+        <thead class="ui-widget-header">
+        <tr>
+            <th><span class="ui-icon ui-icon-pencil"></span></th>
+            <th><span class="ui-icon ui-icon-trash"></span></th>
+            <th>ID</th>
+            <th>Version</th>
+            <th>Min Size</th>
+            <th>Max Terrain</th>
+            <th>Max Difficulty</th>
+        </tr>
+        </thead>
+        <tbody class="ui-widget-content"></tbody>
+    </table>
+    <button id="addGeocacheButton">Add Geocache To List</button>
+</div>
+</body>
 </html>

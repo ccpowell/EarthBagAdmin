@@ -1,0 +1,15 @@
+{
+
+    "name": "EarthBagAdmin",
+    "version": "0.1.0",
+
+    "dependencies": {
+        "jquery": "2.0.3",
+        "jquery-ui": "*",
+        "jquery.cookie": "*",
+        "requirejs": "2.1.8",
+        "almond": "~0.2.6",
+        "lodash": "~2.2.0",
+        "text": "*"
+    }
+}
