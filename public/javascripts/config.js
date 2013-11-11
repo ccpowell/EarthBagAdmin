@@ -11,7 +11,7 @@ require.config({
 
         // Map remaining vendor dependencies.
         "jquery": "bower_components/jquery/jquery",
-        "jquery-ui": "bower_components/jquery-ui/jquery-ui",
+        "jquery-ui": "bower_components/jquery-ui/ui/jquery-ui",
         "cookie": "bower_components/jquery.cookie/jquery.cookie",
         "text": "bower_components/text/text"
     },

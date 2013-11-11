@@ -16,7 +16,8 @@
         <tr>
             <th><span class="ui-icon ui-icon-pencil"></span></th>
             <th><span class="ui-icon ui-icon-trash"></span></th>
-            <th>Version</th>
+            <th><span class="ui-icon ui-icon-triangle-1-e"></span></th>
+            <th>Name</th>
             <th>Min Size</th>
             <th>Max Terrain</th>
             <th>Max Difficulty</th>
@@ -25,6 +26,56 @@
         <tbody class="ui-widget-content"></tbody>
     </table>
     <button id="addGeocacheButton">Add Geocache To List</button>
+</div>
+<div id="regionDialog" title="Region">
+    <div>
+        <label>Name</label>
+        <input type="text" id="regionName"/>
+    </div>
+    <div>
+        <label>Min Size</label>
+        <input type="text" id="regionMinSize"/>
+    </div>
+    <div>
+        <label>Max Terrain</label>
+        <input type="text" id="regionMaxTerrain"/>
+    </div>
+    <div>
+        <label>Max Difficulty</label>
+        <input type="text" id="regionMaxDifficulty"/>
+    </div>
+    <table id="areasTable">
+        <thead class="ui-widget-header">
+        <tr>
+            <th><span class="ui-icon ui-icon-pencil"></span></th>
+            <th><span class="ui-icon ui-icon-trash"></span></th>
+            <th>Min Latitude</th>
+            <th>Max Latitude</th>
+            <th>Min Longitude</th>
+            <th>Max Longitude</th>
+        </tr>
+        </thead>
+        <tbody class="ui-widget-content"></tbody>
+    </table>
+    <button id="addAreaButton">Add Area to Region</button>
+</div>
+<div id="areaDialog" title="Area">
+    <div>
+        <label>Min Latitude</label>
+        <input type="text" id="areaMinLatitude"/>
+    </div>
+    <div>
+        <label>Max Latitude</label>
+        <input type="text" id="areaMaxLatitude"/>
+    </div>
+    <div>
+        <label>Min Longitude</label>
+        <input type="text" id="areaMinLongitude"/>
+    </div>
+    <div>
+        <label>Max Longitude</label>
+        <input type="text" id="areaMaxLongitude"/>
+    </div>
 </div>
 </body>
 </html>
