@@ -77,6 +77,7 @@ define(['jquery', 'underscore', 'jquery-ui',
             return region;
         }
 
+        // set commands for callbacks
         commands.regions.editRegion = function (id) {
             data.currentRegion = _.clone(_.find(data.regions, function (item) {
                 return item._id === id;
