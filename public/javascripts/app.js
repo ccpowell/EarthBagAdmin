@@ -40,7 +40,6 @@ define(['jquery', 'underscore', 'jquery-ui',
             });
         }
 
-
         function refreshRegions() {
             $.getJSON('/regions')
                 .done(function (regions) {
