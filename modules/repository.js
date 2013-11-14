@@ -2,61 +2,53 @@
  * Created by chris_000 on 11/11/13.
  * Mongo-based repository
  */
-var mongo = require('mongodb'),
+var mongoose = require('mongoose'),
     Q = require('q'),
-    host = 'localhost',
-    _ = require('underscore'),
-    port = mongo.Connection.DEFAULT_PORT;
+    _ = require('lodash'),
+    gmjr = require('./gmjrSchema');
 
-function newClient() {
-    return new mongo.MongoClient(new mongo.Server(host, port, {native_parser: true}));
-}
+mongoose.connect('mongodb://localhost/gmjr');
+mongoose.connection.on('error', function (err) {
+    console.log(err);
+});
 
 function makeError(message) {
     return Q.fcall(function () {
         throw message;
     })
 }
-var level = 0;
 
-function withCollection(name, action) {
-    var mongoclient = newClient();
-    console.log('open ' + ++level);
-    return Q.ninvoke(mongoclient, 'open')
-        .then(function (client) {
-            return Q.ninvoke(client.db('gmjr'), 'open');
-        })
-        .then(function (db) {
-            return Q.ninvoke(db, 'collection', name);
-        })
-        .then(action)
-        .fin(function () {
-            mongoclient.close();
-            console.log('close ' + level--);
+function getRegions() {
+    return Q.ninvoke(gmjr.Region, 'find');
+}
+
+function createRegion(data) {
+    var region = new gmjr.Region(data);
+    return Q.ninvoke(region, 'save')
+        .then(function () {
+            return Q(region.toJSON());
         });
 }
 
-
-function getById(collectionName, id){
-    var action = function (collection) {
-        return Q.ninvoke(collection, 'findOne', { _id: mongo.ObjectID(id) });
-    };
-    return withCollection(collectionName, action);
+function deleteRegion(id) {
+    return Q.ninvoke(gmjr.Region, 'remove', {_id: id});
 }
 
-function getByAttributes(collectionName, attributes) {
-    var action = function (collection) {
-        return Q.ninvoke(collection, 'findOne', attributes);
-    };
-    return withCollection(collectionName, action);
-}
-
-function getRegions() {
-    var action = function(regions) {
-        var cursor = regions.find();
-        return Q.ninvoke(cursor, 'toArray');
-    }
-    return withCollection('regions', action);
+function updateRegion(data) {
+    var id = data._id,
+        deferred = Q.defer();
+    delete data._id;
+    gmjr.Region.findByIdAndUpdate(id, data, {}, function(err, region) {
+        if (err) {
+            deferred.reject(err);
+        } else {
+            deferred.resolve(region);
+        }
+    });
+    return deferred.promise;
 }
 
 exports.getRegions = getRegions;
+exports.createRegion = createRegion;
+exports.deleteRegion = deleteRegion;
+exports.updateRegion = updateRegion;

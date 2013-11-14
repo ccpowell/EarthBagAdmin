@@ -31,8 +31,7 @@ define(['jquery', 'underscore', 'jquery-ui',
         };
 
         function renderRegions() {
-            var template = regionsRow,
-                compiled = _.template(template),
+            var compiled = _.template(regionsRow),
                 tbody = $('#regionsTable').find('tbody');
             tbody.empty();
             $.each(data.regions, function (index, region) {
@@ -55,57 +54,99 @@ define(['jquery', 'underscore', 'jquery-ui',
             var dlg = $('#regionDialog'),
                 region = data.currentRegion,
                 tbody = $('#areasTable').find('tbody'),
-                template = areaRow,
-                compiled = _.template(template);
+                compiled = _.template(areaRow);
             tbody.empty();
             $.each(region.areas, function (index, area) {
                 $(compiled(area)).appendTo(tbody).data('index', index);
             });
             dlg.find('#regionName').val(region.version);
-            dlg.find('#regionMinSize').val(region.min_size);
-            dlg.find('#regionMaxTerrain').val(region.max_terrain);
-            dlg.find('#regionMaxDifficulty').val(region.max_difficulty);
+            dlg.find('#regionMinSize').val(region.minSize);
+            dlg.find('#regionMaxTerrain').val(region.maxTerrain);
+            dlg.find('#regionMaxDifficulty').val(region.maxDifficulty);
         }
 
+        // areas are already current
         function getDialogRegion() {
             var dlg = $('#regionDialog'),
                 region = data.currentRegion;
             region.version = dlg.find('#regionName').val().trim();
-            region.max_difficulty = parseInt(dlg.find('#regionMaxDifficulty').val());
-            region.max_terrain = parseInt(dlg.find('#regionMaxTerrain').val());
-            region.min_size = parseInt(dlg.find('#regionMinSize').val());
+            region.maxDifficulty = parseInt(dlg.find('#regionMaxDifficulty').val());
+            region.maxTerrain = parseInt(dlg.find('#regionMaxTerrain').val());
+            region.minSize = parseInt(dlg.find('#regionMinSize').val());
             return region;
         }
 
         // set commands for callbacks
+
+        commands.regions.deleteRegion = function (id) {
+            app.postJson('/regions/' + id, {}, {type: 'DELETE'})
+                .done(refreshRegions)
+                .fail(function(x) {
+                    alert('failed ' + x.statusText);
+                });
+            return false;
+        };
+
         commands.regions.editRegion = function (id) {
             data.currentRegion = _.clone(_.find(data.regions, function (item) {
                 return item._id === id;
             }));
             dialogs.regionDialog.dialog('open');
             setDialogRegion();
-        }
+            return false;
+        };
+
+        commands.regions.updateRegion = function() {
+            getDialogRegion();
+            app.postJson('/regions/' + data.currentRegion._id, data.currentRegion, {type: 'PUT'})
+                .done(function() {
+                    dialogs.regionDialog.dialog('close');
+                    refreshRegions();
+                })
+                .fail(function(x) {
+                    alert('failed ' + x.statusText);
+                });
+            return false;
+        };
+
+        commands.regions.addRegion = function() {
+            var region = {
+                baseName: 'new_region',
+                version: 'New Region'
+            };
+            app.postJson('/regions', region)
+                .done(function() {
+                    refreshRegions();
+                })
+                .fail(function(x) {
+                    alert('failed ' + x.statusText);
+                });
+            return false;
+        };
 
         commands.areas.editArea = function (index) {
             data.currentArea = _.clone(data.currentRegion[index]);
             dialogs.areaDialog.dialog('open');
             setDialogArea();
-        }
+            return false;
+        };
 
         commands.areas.deleteArea = function (index) {
             data.currentRegion.areas.splice(index, 1);
             setDialogRegion();
-        }
+            return false;
+        };
 
         commands.areas.addArea = function (index) {
             data.currentRegion.areas.push({
-                min_latitude: 0,
-                max_latitude: 0,
-                min_longitude: 0,
-                max_longitude: 0
+                minLatitude: 0,
+                maxLatitude: 0,
+                minLongitude: 0,
+                maxLongitude: 0
             });
             setDialogRegion();
-        }
+            return false;
+        };
 
         function initializeRegionsTable() {
             var tbody = $('#regionsTable').find('tbody');
@@ -134,9 +175,7 @@ define(['jquery', 'underscore', 'jquery-ui',
                 width: 600,
                 modal: true,
                 buttons: {
-                    "Save": function () {
-                        $(this).dialog('close');
-                    },
+                    "Save": commands.regions.updateRegion,
                     "Cancel": function () {
                         $(this).dialog('close');
                     }
@@ -164,6 +203,8 @@ define(['jquery', 'underscore', 'jquery-ui',
 
         function initializeUi() {
             initializeRegionsTable();
+            $('#addRegionButton').button().click(commands.regions.addRegion);
+
             initializeDialogs();
 
             console.log('ui initialized');

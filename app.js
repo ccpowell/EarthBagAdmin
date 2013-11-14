@@ -33,6 +33,9 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 
 app.get('/regions', regions.getRegions);
+app.post('/regions', regions.createRegion);
+app.put('/regions/:id', regions.updateRegion);
+app.delete('/regions/:id', regions.deleteRegion);
 
 
 http.createServer(app).listen(app.get('port'), function(){
